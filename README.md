@@ -40,3 +40,10 @@ The trade-off: this library only handles timecode as a *label*. It does not map 
 - `Timecode` — frozen dataclass with `hours`, `minutes`, `seconds`, `frames`, `frame_rate` fields. Methods: `format()`, `total_frames()`, `add_frames(n)`, classmethods `parse(text, frame_rate)` and `from_frames(total, frame_rate)`.
 - `FrameRate` — enum: `FPS_24`, `FPS_25`, `FPS_30`, `FPS_30_DROP`.
 - `TimecodeError` — subclass of `ValueError`, raised on all parse and range errors.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
